@@ -17,6 +17,10 @@ RUN set -ex; \
 	chmod -R 777 /var/www/html/api/vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/; \
 	patch /var/www/html/index.php < /var/www/html/fix-https-reverse-proxy.diff;
 
+RUN apt-get install -y libc-client-dev libkrb5-dev
+RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl;
+RUN docker-php-ext-install imap
+RUN docker-php-ext-enable imap;
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
